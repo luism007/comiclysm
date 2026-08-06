@@ -1,0 +1,6 @@
+@Comiclysm.Api_HostAddress = http://localhost:5235
+
+GET {{Comiclysm.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
