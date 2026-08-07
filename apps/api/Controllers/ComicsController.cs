@@ -35,17 +35,17 @@ public class ComicsController : ControllerBase
         }
 
         var comics = _inventoryService.GetAll(
-            title, 
+            title,
             writer,
             releaseDate,
             page,
             pageSize
         );
 
-        return Ok(comics); 
+        return Ok(comics);
     }
 
-     [HttpGet("{id:int}")]
+    [HttpGet("{id:int}")]
     public ActionResult<ComicInventoryResponse> GetById(int id)
     {
         var comic = _inventoryService.GetById(id);
@@ -56,5 +56,79 @@ public class ComicsController : ControllerBase
         }
 
         return Ok(comic);
+    }
+
+    [HttpPost]
+    public ActionResult<ComicInventoryResponse> Create(
+        CreateComicIssuesRequest request
+    )
+    {
+        var comic = _inventoryService.Create(request);
+
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = comic.ComicIssueId },
+            comic
+        );
+    }
+
+    [HttpPost("{id:int}/receive")]
+    public ActionResult<ComicInventoryResponse> ReceiveStock(
+        int id,
+        AdjustInventoryRequest request
+    )
+    {
+
+        var comic = _inventoryService.ReceiveStock(id, request.Quantity);
+
+        if (comic is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(comic);
+    }
+
+    [HttpPost("{id:int}/sell")]
+    public ActionResult<ComicInventoryResponse> SellStock(
+        int id,
+        AdjustInventoryRequest request
+    )
+    {
+        var existingComic = _inventoryService.GetById(id);
+
+        if (existingComic is null)
+        {
+            return NotFound();
+        }
+
+        if (existingComic.QuantityOnHand < request.Quantity)
+        {
+            return Conflict(new
+            {
+                message = "Insufficient inventory.",
+                quantityAvailable = existingComic.QuantityOnHand,
+                quantityRequested = request.Quantity
+            });
+        }
+
+        var updatedComic = _inventoryService.SellStock(
+            id,
+            request.Quantity
+        );
+
+        return Ok(updatedComic);
+    }
+
+    [HttpDelete("{id:int}")]
+    public IActionResult Delete(int id)
+    {
+        var deleted = _inventoryService.Delete(id);
+        if (!deleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }
