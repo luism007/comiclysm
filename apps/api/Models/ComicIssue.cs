@@ -13,5 +13,5 @@ public class ComicIssue
     public decimal CoverPrice { get; set; }
     public string? CoverImageUrl { get; set; }
     public ComicSeries? ComicSeries { get; set; }
-    public InventoryItem? Inventory { get; set; }
+    public List<InventoryItem> InventoryItems { get; set; } = [];
 }
