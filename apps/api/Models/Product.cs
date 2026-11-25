@@ -10,4 +10,6 @@ public class Product
     public string? Barcode {get; set;}
     public DateOnly? ReleaseDate {get; set;}
     public bool IsActive {get; set; } = true;
+
+    public PublicationDetails? PublicationDetails {get; set;}
 }
