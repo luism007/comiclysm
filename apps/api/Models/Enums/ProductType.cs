@@ -1,3 +1,4 @@
+namespace Comiclysm.Api.Models.Enums;
 public enum ProductType
 {
     SingleIssue = 1,

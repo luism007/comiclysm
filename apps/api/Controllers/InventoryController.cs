@@ -7,11 +7,11 @@ namespace Comiclysm.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ComicsController : ControllerBase
+public class InventoryController : ControllerBase
 {
     private readonly IComicInventoryService _inventoryService;
 
-    public ComicsController(
+    public InventoryController(
         IComicInventoryService inventoryService
     )
     {
