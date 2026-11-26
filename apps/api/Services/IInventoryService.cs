@@ -4,7 +4,7 @@ namespace Comiclysm.Api.Services;
 
 public interface IInventoryService
 {
-    IReadOnlyCollection<InventoryResponse> GetAllSync(
+    Task<IReadOnlyCollection<InventoryResponse>> GetAllAsync(
         int storeId,
         string? search,
         string? productType,
